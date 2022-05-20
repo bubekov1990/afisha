@@ -1,52 +1,46 @@
 package ru.netology.domain;
 
-import lombok.Data;
-
-@Data
+import ru.netology.domain.MovieData;
 
 public class MovieManager {
-    private Movie[] movies = new Movie[0];
-    private int defaultMovieLength = 10;
+    private MovieData[] films;
+    private int filmsNumber;
 
 
 
-
-    MovieManager() {
-
+    public void addFilm(MovieData film) {
+        MovieData[] collection = new MovieData[films.length + 1];
+        System.arraycopy(films, 0, collection, 0, films.length);
+        collection[collection.length - 1] = film;
+        films = collection;
     }
 
-    public MovieManager(int customMovieLength) {
-        if (customMovieLength > 0) {
-            defaultMovieLength = customMovieLength;
-        }
-
+    public MovieManager(int filmsNumber) {
+        this.filmsNumber = filmsNumber;
+        this.films = new MovieData[0];
     }
 
-    public void addMovie(Movie movie) {
-        int length = movies.length + 1;
-        Movie[] tmp = new Movie[length];
-        for (int i = 0; i < movies.length; i++) {
-            tmp[i] = movies[i];
-        }
-        int lastMovie = tmp.length - 1;
-        tmp[lastMovie] = movie;
-        movies = tmp;
-
+    public MovieManager() {
+        this(10);
     }
 
-    public Movie[] getLastAdd() {
-        int moviesLength = movies.length;
-        if (moviesLength < defaultMovieLength) {
-            defaultMovieLength = moviesLength;
+    public MovieData[] showAll() {
+        int resultLength;
+        if (films.length > filmsNumber) {
+            resultLength = filmsNumber;
+        } else {
+            resultLength = films.length;
         }
-        Movie[] customFilm = new Movie[defaultMovieLength];
-        for (int i = 0; i < customFilm.length; i++) {
-            int result = moviesLength - i - 1;
-            customFilm[i] = movies[result];
+        MovieData[] result = new MovieData[resultLength];
 
+        for (int i = 0; i < resultLength; i++) {
+            int index = films.length - i - 1;
+            result[i] = films[index];
         }
-        return customFilm;
+        return result;
     }
 
-
+    public int getFilmQuantity() {
+        return films.length;
+    }
 }
