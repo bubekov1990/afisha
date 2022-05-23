@@ -1,53 +1,118 @@
 package ru.netology.domain;
 
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.netology.domain.MovieData;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MovieManagerTest {
-    private MovieManager manager = new MovieManager();
-
-    private MovieData first = new MovieData(1, "Один дома", "jpg", "comedy", true);
-    private MovieData second = new MovieData(2, "Драйв", "jpg", "action", true);
-    private MovieData third = new MovieData(3, "Достучаться до небес", "jpg", "drama", true);
-    private MovieData fourth = new MovieData(4, "Отель", "jpg", "comedy", false);
-    private MovieData fifth = new MovieData(5, "Битва за Москву", "jpg", "military drama", true);
-    private MovieData sixth = new MovieData(6, "В августе 44-го", "jpg", "military drama", false);
-    private MovieData seventh = new MovieData(7, "Интерстеллар", "jpg", "action", true);
-    private MovieData eighth = new MovieData(8, "Матрица", "jpg", "action", true);
-    private MovieData ninth = new MovieData(9, "Безумный Макс", "jpg", " action ", true);
-    private MovieData tenth = new MovieData(10, "Поезд на Юму", "jpg", "western", false);
-
-    @BeforeEach
-    void setUp() {
-        manager.addFilm(first);
-        manager.addFilm(second);
-        manager.addFilm(third);
-        manager.addFilm(fourth);
-        manager.addFilm(fifth);
-        manager.addFilm(sixth);
-        manager.addFilm(seventh);
-        manager.addFilm(eighth);
-        manager.addFilm(ninth);
-        manager.addFilm(tenth);
-    }
+    Movies one = new Movies(1, "One");
+    Movies two = new Movies(2, "Two");
+    Movies three = new Movies(3, "Three");
+    Movies four = new Movies(4, "Four");
+    Movies five = new Movies(5, "Five");
+    Movies six = new Movies(6, "Six");
+    Movies seven = new Movies(7, "Seven");
+    Movies eight = new Movies(8, "Eight");
+    Movies nine = new Movies(9, "Nine");
+    Movies ten = new Movies(10, "Ten");
+    Movies eleven = new Movies(11, "Eleven");
 
     @Test
-    void shouldAddAnyNumberOfMovies() {
-        manager.addFilm(new MovieData(11, "2012", "jpg", "fantastic", false));
-        int expected = 11;
-        int actual = manager.getFilmQuantity();
-
+    void checkMovieLimit() {
+        MovieManager manager = new MovieManager();
+        int actual = manager.getLimitMovies();
+        int expected = 10;
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldGetAllArray() {
-        int expected = 10;
-        MovieData[] actual = manager.showAll();
-
-        assertEquals(expected, actual.length);
+    void addMovie() {
+        MovieManager manager = new MovieManager();
+        manager.addMovie(one);
+        manager.addMovie(two);
+        Movies[] expected = {one, two};
+        Movies[] actual = manager.findAll();
+        assertArrayEquals(expected, actual);
     }
+
+    @Test
+    public void showNullMovie() {
+        MovieManager manager = new MovieManager();
+        Movies[] expected = {};
+        Movies[] actual = manager.findAll();
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void addTenMovies() {
+        MovieManager manager = new MovieManager();
+        manager.addMovie(one);
+        manager.addMovie(two);
+        manager.addMovie(three);
+        manager.addMovie(four);
+        manager.addMovie(five);
+        manager.addMovie(six);
+        manager.addMovie(seven);
+        manager.addMovie(eight);
+        manager.addMovie(nine);
+        manager.addMovie(ten);
+        Movies[] expected = {one, two, three, four, five, six, seven, eight, nine, ten};
+        Movies[] actual = manager.findAll();
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldAddAllMovies() {
+        MovieManager manager = new MovieManager(11);
+        manager.addMovie(one);
+        manager.addMovie(two);
+        manager.addMovie(three);
+        manager.addMovie(four);
+        manager.addMovie(five);
+        manager.addMovie(six);
+        manager.addMovie(seven);
+        manager.addMovie(eight);
+        manager.addMovie(nine);
+        manager.addMovie(ten);
+        manager.addMovie(eleven);
+        Movies[] expected = {one, two, three, four, five, six, seven, eight, nine, ten, eleven};
+        Movies[] actual = manager.findAll();
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void findLastTenMovies() {
+        MovieManager manager = new MovieManager(10);
+        manager.addMovie(one);
+        manager.addMovie(two);
+        manager.addMovie(three);
+        manager.addMovie(four);
+        manager.addMovie(five);
+        manager.addMovie(six);
+        manager.addMovie(seven);
+        manager.addMovie(eight);
+        manager.addMovie(nine);
+        manager.addMovie(ten);
+        manager.addMovie(eleven);
+        Movies[] expected = {eleven, ten, nine, eight, seven, six, five, four, three, two};
+        Movies[] actual = manager.findLast();
+
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void findLastFiveMovies() {
+        MovieManager manager = new MovieManager(5);
+        manager.addMovie(one);
+        manager.addMovie(two);
+        manager.addMovie(three);
+        manager.addMovie(four);
+        manager.addMovie(five);
+        manager.addMovie(six);
+
+        Movies[] expected = {six, five, four, three, two};
+        Movies[] actual = manager.findLast();
+
+        assertArrayEquals(expected, actual);
+    }
+}

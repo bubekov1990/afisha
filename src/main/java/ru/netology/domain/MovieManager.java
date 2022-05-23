@@ -1,46 +1,62 @@
 package ru.netology.domain;
 
-import ru.netology.domain.MovieData;
 
 public class MovieManager {
-    private MovieData[] films;
-    private int filmsNumber;
+    private int limitMovies = 10;//вего 10
+    private Movies[] moviesList = new Movies[0];//массив
 
-
-
-    public void addFilm(MovieData film) {
-        MovieData[] collection = new MovieData[films.length + 1];
-        System.arraycopy(films, 0, collection, 0, films.length);
-        collection[collection.length - 1] = film;
-        films = collection;
+    public MovieManager() {// менеджер кинох
     }
 
-    public MovieManager(int filmsNumber) {
-        this.filmsNumber = filmsNumber;
-        this.films = new MovieData[0];
+    public MovieManager(int limitMovies) {
+        this.limitMovies = limitMovies;
     }
 
-    public MovieManager() {
-        this(10);
+    public Movies[] getMoviesList() {//дай
+        return moviesList;
     }
 
-    public MovieData[] showAll() {
-        int resultLength;
-        if (films.length > filmsNumber) {
-            resultLength = filmsNumber;
+    public void setMoviesList(Movies[] moviesList) {
+        this.moviesList = moviesList;
+    }
+
+    public int getLimitMovies() {//конструктор пустой
+        return limitMovies;
+    }
+
+    public void setLimitMovies(int limitMovies) {
+        this.limitMovies = limitMovies;
+    }
+
+    public void addMovie(Movies movieAdd) { // Добавляем. lenght длина
+        int lenght = moviesList.length + 1;
+        Movies[] tmp = new Movies[lenght];
+        //скопировать элементы из одного массива в другой:
+        System.arraycopy(moviesList, 0, tmp, 0, moviesList.length);
+        int addFilm = tmp.length - 1;
+        tmp[addFilm] = movieAdd;
+        moviesList = tmp;
+    }
+
+    public Movies[] findLast() { // вывод в обратном от добавления порядке
+        int resultLenght;
+        if (moviesList.length <= limitMovies) {
+            resultLenght = moviesList.length;
         } else {
-            resultLength = films.length;
+            resultLenght = limitMovies;
         }
-        MovieData[] result = new MovieData[resultLength];
-
-        for (int i = 0; i < resultLength; i++) {
-            int index = films.length - i - 1;
-            result[i] = films[index];
+        Movies[] result = new Movies[resultLenght];
+        for (int i = 0; i < resultLenght; i++) {
+            int index = moviesList.length - i - 1;
+            result[i] = moviesList[index];
         }
         return result;
     }
 
-    public int getFilmQuantity() {
-        return films.length;
+    public Movies[] findAll() {//Вывод всех фильмов в порядке добавления (findAll)
+        Movies[] result = new Movies[moviesList.length];
+        //скопировать элементы из одного массива в другой:
+        System.arraycopy(moviesList, 0, result, 0, result.length);
+        return result;
     }
 }
